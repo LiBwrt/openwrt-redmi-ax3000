@@ -6,6 +6,7 @@ START=99
 
 boot() {
 	case $(board_name) in
+		jdcloud,re-cs-03|\
 		redmi,ax3000|\
 		xiaomi,cr881x)
 			fw_printenv >/dev/null || return 0

@@ -6,6 +6,7 @@ ipq50xx_setup_interfaces()
 {
 	local board="$1"
 	case $board in
+		jdcloud,re-cs-03|\
 		redmi,ax3000)
 			ucidef_add_switch "switch1" \
 				"6u@eth1" "5u@eth0" \

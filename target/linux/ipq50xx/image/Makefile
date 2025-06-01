@@ -18,6 +18,12 @@ define Device/Default
   IMAGE/sysupgrade.tar := sysupgrade-tar | append-metadata
 endef
 
+define Device/EmmcImage
+	IMAGES += factory.bin
+	IMAGE/factory.bin := append-rootfs | pad-rootfs | pad-to 64k
+	IMAGE/sysupgrade.bin/squashfs := append-rootfs | pad-to 64k | sysupgrade-tar rootfs=$$$$@ | append-metadata
+endef
+
 define Device/FitImage
   KERNEL_SUFFIX := -fit-uImage.itb
   KERNEL = kernel-bin | lzma | fit lzma $$(KDIR)/image-$$(DEVICE_DTS).dtb
@@ -87,5 +93,22 @@ define Device/xiaomi_cr881x
 	ipq-wifi-xiaomi_cr881x
 endef
 TARGET_DEVICES += xiaomi_cr881x
+
+define Device/jdcloud_re-cs-03
+	$(call Device/FitImage)
+	$(call Device/EmmcImage)
+	DEVICE_VENDOR := JDCloud
+	DEVICE_MODEL := RE-CS-03
+	BLOCKSIZE := 128k
+	KERNEL_SIZE := 6144k
+	SOC := ipq5018
+	DEVICE_DTS_CONFIG := config@mp03.5-c2
+	DEVICE_PACKAGES := \
+  ath11k-firmware-ipq5018 \
+	ath11k-firmware-qcn6122 \
+  ipq-wifi-jdcloud_re-cs-03
+	IMAGE/factory.bin := append-kernel | pad-to $$(KERNEL_SIZE) | append-rootfs | append-metadata
+endef
+TARGET_DEVICES += jdcloud_re-cs-03
 
 $(eval $(call BuildImage))

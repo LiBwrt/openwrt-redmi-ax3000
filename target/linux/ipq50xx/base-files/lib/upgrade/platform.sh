@@ -25,6 +25,11 @@ platform_do_upgrade() {
 		xiaomi,cr881x)
 			mi_dualboot_do_upgrade "$1"
 			;;
+		jdcloud,re-cs-03)
+		CI_KERNPART="0:HLOS"
+		CI_ROOTPART="rootfs"
+		emmc_do_upgrade "$1"
+		;;
 		*)
 			default_do_upgrade "$1"
 			;;
